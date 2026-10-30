@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102b22">
+<title>DrainDNA | Municipal Drain Monitoring</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topbar">
+ <a class="brand" href="#"><span class="brandmark">≈</span><span>DrainDNA<small>MUNICIPAL DRAIN MONITORING</small></span></a>
+ <div class="top-right"><div class="live"><i class="dot"></i> DEMONSTRATION ENVIRONMENT</div><div class="profile"><span class="avatar">AO</span><span>Admin Officer<br><small style="color:#8fa397">Chennai Region</small></span></div></div>
+</header>
+<div class="shell">
+<aside>
+ <div class="side-label">WORKSPACE</div>
+ <a class="side-link active" href="#overview"><span>▦</span> Overview</a>
+ <a class="side-link" href="#registry"><span>⌖</span> Drain registry</a>
+ <a class="side-link" href="#selected-drain"><span>◉</span> Drain details</a>
+ <a class="side-link" href="#records"><span>▤</span> Inspection records</a>
+ <div class="side-label" style="margin-top:22px">MANAGEMENT</div>
+ <a class="side-link" href="#records"><span>▧</span> Image records</a>
+ <a class="side-link" href="#analytics"><span>◷</span> Analytics & trends</a>
+ <a class="side-link" href="#maintenance"><span>⚒</span> Maintenance</a>
+ <a class="side-link" href="#evidence"><span>▧</span> Cartridge evidence</a>
+ <a class="side-link" href="#public-reports"><span>＋</span> Public reports</a>
+</aside>
+<main id="overview">
+ <div class="pagehead"><div><div class="eyebrow">CITY INFRASTRUCTURE / MONITORING</div><h1>Drain Monitoring Centre</h1><p>Centralized view of registered drainage assets, recorded levels and inspection activity.</p></div><div class="head-actions"><button class="btn light" onclick="exportCSV()">↓ Export records</button><button class="btn green" onclick="openModal()">＋ Register drain</button></div></div>
+ <div class="filters">
+  <div class="filter"><label>City</label><select id="city"><option>Chennai</option><option disabled>Coimbatore — coming soon</option><option disabled>Madurai — coming soon</option></select></div>
+  <div class="filter"><label>Monitoring site</label><select id="site"><option value="All sites">All sites</option><option>Adyar</option><option>Velachery</option><option>T. Nagar</option><option>Anna Nagar</option><option>Perungudi</option><option>Guindy</option></select></div>
+  <div class="filter search"><label>Find a drain</label><input id="search" placeholder="Search Drain ID, site or street..."></div>
+  <div class="filter"><label>Level status</label><select id="statusFilter"><option value="All">All statuses</option><option value="High">High</option><option value="Watch">Watch</option><option value="Normal">Normal</option></select></div>
+ </div>
+ <div class="kpis">
+  <div class="kpi"><div class="kpi-top"><span class="label">Registered drains</span><span class="symbol">⌖</span></div><strong id="totalKpi">12</strong><small>Across selected monitoring sites</small></div>
+  <div class="kpi"><div class="kpi-top"><span class="label">High level</span><span class="symbol" style="background:#fff0ed;color:#b84e40">↑</span></div><strong id="highKpi">3</strong><small>Requires priority inspection</small></div>
+  <div class="kpi"><div class="kpi-top"><span class="label">Watch list</span><span class="symbol" style="background:#fff6e7;color:#a5792e">◷</span></div><strong id="watchKpi">4</strong><small>Monitor during next review</small></div>
+  <div class="kpi"><div class="kpi-top"><span class="label">Images recorded</span><span class="symbol">▧</span></div><strong id="imageKpi">5</strong><small>Sample records in this sample</small></div>
+ </div>
+ <div class="content-grid">
+  <section class="panel" id="registry"><div class="panel-head"><div><h2>Registered drain assets</h2><p>Select any drain to view its individual monitoring record.</p></div><span class="chip" id="countChip">12 DRAINS</span></div>
+   <div class="table-wrap"><table><thead><tr><th>Drain ID</th><th>Monitoring site</th><th>Recorded level</th><th>Status</th><th>Last observation</th></tr></thead><tbody id="drainRows"></tbody></table></div>
+  </section>
+  <section class="panel"><div class="panel-head"><div><h2>Level distribution</h2><p>Illustrative drain level by status</p></div><span class="chip">SAMPLE DATA</span></div><div class="chart" id="chart"></div><div class="chart-legend">● Each bar represents a sample drain's recorded level as a percentage of the assumed monitoring range.</div></section>
+ </div>
+ <section class="detail-panel" id="selected-drain">
+  <div class="panel"><div class="detail-title"><div><div class="eyebrow">INDIVIDUAL ASSET PROFILE</div><h2 id="detailId">CHN-ADY-001</h2><div class="detail-meta" id="detailMeta">Adyar · Sample monitoring location</div></div><span class="status high" id="detailStatus">HIGH</span></div>
+   <div style="margin-top:22px"><div class="eyebrow">LATEST RECORDED DRAIN LEVEL</div><div class="level-number"><span id="detailLevel">86</span><small> / 100%</small></div><div class="level-track"><div class="level-fill" id="levelFill" style="width:86%"></div></div><div class="detail-meta">Illustrative level indicator · not a live sensor reading</div></div>
+   <div class="detail-stats"><div>LAST OBSERVED<b id="detailDate">Today, 09:30</b></div><div>IMAGE RECORDS<b id="detailImages">1 attached</b></div><div>ASSET STATUS<b id="detailAsset">Registered</b></div></div>
+   <div style="margin-top:18px"><button class="btn" onclick="openReading()">＋ Add level observation</button></div>
+  </div>
+  <div class="panel" id="records"><div class="panel-head"><div><h2>Drain image & inspection records</h2><p>Files are previewed locally in this demonstration.</p></div><span class="chip">SELECTED DRAIN</span></div>
+   <div class="uploadbox"><div style="font-size:23px">▧</div><b style="font:700 12px Manrope">Attach cartridge / drain image</b><p style="font-size:9px;color:#87958b">The image will be associated with the selected drain ID in this sample session.</p><input type="file" id="imageInput" accept="image/*"><img class="preview" id="imagePreview" alt="Uploaded drain image"><div id="imageName" style="font-size:9px;color:#6e806f;margin-top:7px"></div></div>
+   <div class="history" id="history"><div class="history-row"><span>Initial sample registration</span><span>sample RECORD</span></div></div>
+  </div>
+ </section>
+
+ <section class="module-grid" id="analytics">
+  <div class="panel">
+   <div class="panel-head"><div><h2>Municipal operations analytics</h2><p>Illustrative summary for the selected demonstration dataset</p></div><span class="chip">illustrative analytics</span></div>
+   <div class="metric-list">
+    <div class="metric"><span>INSPECTIONS COMPLETED</span><b>28</b><span>Sample records</span></div>
+    <div class="metric"><span>PENDING INSPECTIONS</span><b>06</b><span>Illustrative queue</span></div>
+    <div class="metric"><span>MAINTENANCE PENDING</span><b>04</b><span>Sample tasks</span></div>
+    <div class="metric"><span>MAINTENANCE COMPLETED</span><b>17</b><span>Sample records</span></div>
+    <div class="metric"><span>VERIFICATION PENDING</span><b>03</b><span>Awaiting follow-up</span></div>
+    <div class="metric"><span>RECURRING ISSUE FLAGS</span><b>05</b><span>Rule-based examples</span></div>
+   </div>
+   <p class="module-note">These are illustrative dashboard figures, not live database analytics. In a deployed system, all metrics should be calculated from verified inspection, maintenance and verification records. Date and status filters can be connected to those records in the backend.</p>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><div><h2>Inspection & maintenance trends</h2><p>Example monthly activity overview</p></div><span class="chip">SAMPLE SERIES</span></div>
+   <div class="chart" style="height:145px">
+    <div class="chart-col"><div class="chart-bar" style="height:38%"></div><span>JAN</span></div>
+    <div class="chart-col"><div class="chart-bar" style="height:56%"></div><span>FEB</span></div>
+    <div class="chart-col"><div class="chart-bar" style="height:48%"></div><span>MAR</span></div>
+    <div class="chart-col"><div class="chart-bar" style="height:74%"></div><span>APR</span></div>
+    <div class="chart-col"><div class="chart-bar" style="height:65%"></div><span>MAY</span></div>
+    <div class="chart-col"><div class="chart-bar" style="height:88%"></div><span>JUN</span></div>
+   </div>
+   <p class="module-note">Monthly bars are visual placeholders. No real inspection trend is inferred from the sample values.</p>
+  </div>
+ </section>
+ <section class="module-grid" id="maintenance">
+  <div class="panel">
+   <div class="panel-head"><div><h2>Maintenance work queue</h2><p>Example tasks linked to drain IDs</p></div><span class="chip">WORKFLOW PREVIEW</span></div>
+   <div id="taskList">
+    <div class="task-row"><span><b>CHN-ADY-001</b><br><span class="sub">Remove accumulated debris · High priority</span></span><span class="status high">Pending</span></div>
+    <div class="task-row"><span><b>CHN-VEL-002</b><br><span class="sub">Inspect cartridge and clear inlet · Medium</span></span><span class="status watch">Assigned</span></div>
+    <div class="task-row"><span><b>CHN-PER-001</b><br><span class="sub">Follow-up inspection required</span></span><span class="status normal">Awaiting verification</span></div>
+   </div>
+   <p class="module-note">Proposed workflow: Original inspection → maintenance action → follow-up inspection → verification. Before/after evidence and comparisons require actual records; this preview does not claim improvements.</p>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><div><h2>Log a maintenance task</h2><p>Local demonstration interaction</p></div><span class="chip">SESSION ONLY</span></div>
+   <div class="module-form">
+    <input id="taskDrain" placeholder="Drain ID (e.g. CHN-ADY-001)">
+    <select id="taskPriority"><option>High priority</option><option>Medium priority</option><option>Low priority</option></select>
+    <input id="taskAction" placeholder="Maintenance action">
+    <select id="taskStatus"><option>Pending</option><option>Assigned</option><option>In Progress</option><option>Completed</option><option>Awaiting Verification</option><option>Verified</option></select>
+    <button class="btn" onclick="addDemoTask()">＋ Add sample task</button>
+   </div>
+   <p class="module-note">Task entries remain in this browser session only. Staff accounts, permissions, assignments and durable task history need a backend.</p>
+  </div>
+ </section>
+ <section class="module-grid" id="evidence">
+  <div class="panel">
+   <div class="panel-head"><div><h2>Cartridge & evidence register</h2><p>DrainDNA cartridge types</p></div><span class="chip">PRODUCT MODULE</span></div>
+   <div class="task-row"><span><b>DD-C01</b><br><span class="sub">Sediment and Debris Retention</span></span><span class="status normal">Cartridge type</span></div>
+   <div class="task-row"><span><b>DD-C02</b><br><span class="sub">Hydraulic Exposure Indicator</span></span><span class="status normal">Cartridge type</span></div>
+   <div class="task-row"><span><b>Evidence categories</b><br><span class="sub">Sediment · Leaves · Plastic · Organic · Mixed · Other</span></span><span class="chip">TAXONOMY</span></div>
+   <p class="module-note">The drain image upload above acts as a local evidence preview. Cartridge assignment, installation/removal dates, material quantities and replacement history are proposed data fields—not yet stored records.</p>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><div><h2>Recurring issue watchlist</h2><p>Transparent historical-pattern concept</p></div><span class="chip">RULE-BASED</span></div>
+   <div class="task-row"><span><b>CHN-ADY-001</b><br><span class="sub">Repeated debris observations · example flag</span></span><span class="status high">Review</span></div>
+   <div class="task-row"><span><b>CHN-PER-001</b><br><span class="sub">Multiple high-level sample entries · example flag</span></span><span class="status watch">Monitor</span></div>
+   <p class="module-note">A production rule can count similar recorded issues within a configurable date window and flag drains for closer inspection. These sample flags are not AI predictions or flood forecasts.</p>
+  </div>
+ </section>
+ <section class="module-grid" id="public-reports">
+  <div class="panel">
+   <div class="panel-head"><div><h2>Public drainage issue reporting</h2><p>Citizen-facing form concept</p></div><span class="chip">PUBLIC PORTAL PREVIEW</span></div>
+   <div class="module-form">
+    <select id="publicCategory"><option>Waterlogging</option><option>Blockage</option><option>Overflow</option><option>Waste accumulation</option><option>Damaged drainage structure</option><option>Other</option></select>
+    <input id="publicLocation" placeholder="Location / landmark">
+    <textarea id="publicDescription" placeholder="Describe the drainage issue"></textarea>
+    <button class="btn" onclick="submitPublicReport()">Submit sample report</button>
+   </div>
+   <div id="reportResult" class="module-note">A real public portal would generate a reference ID and provide status tracking after server-side validation and rate limiting.</div>
+   <p class="module-note">This form creates a reference for demonstration only. It does not send a report to a municipal authority.</p>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><div><h2>Inspection → maintenance → verification</h2><p>Recommended evidence chain for every drain</p></div><span class="chip">TRACEABLE WORKFLOW</span></div>
+   <div class="task-row"><span><b>01 · Original inspection</b><br><span class="sub">Condition, cartridge status, photos and notes</span></span><span class="status watch">Record</span></div>
+   <div class="task-row"><span><b>02 · Maintenance action</b><br><span class="sub">Assigned staff, action, materials removed, before/after photos</span></span><span class="status watch">Action</span></div>
+   <div class="task-row"><span><b>03 · Follow-up inspection</b><br><span class="sub">Repeat the same observations where possible</span></span><span class="status watch">Compare</span></div>
+   <div class="task-row"><span><b>04 · Verification outcome</b><br><span class="sub">Improved · No significant change · Worsened · Inconclusive</span></span><span class="status normal">Verify</span></div>
+   <p class="module-note">Flow rate can be calculated as water volume ÷ elapsed time when both are measured, with units displayed. No before/after improvement is fabricated in this sample.</p>
+  </div>
+ </section>
+
+<div class="module-note" style="margin:24px 0 8px;text-align:center">
+ DrainDNA municipal monitoring interface · Prototype with illustrative records.
+ Live sensor feeds, official municipal data connections and persistent record storage
+ can be enabled through the production backend.
+</div>
+
+</main>
+</div>
+<div class="modal-back" id="modal"><div class="modal"><div class="eyebrow">ASSET MANAGEMENT</div><h2 id="modalTitle">Register a drain</h2><div class="modal-grid"><div><label>DRAIN ID</label><input id="newId" placeholder="e.g. CHN-ADY-013"></div><div><label>MONITORING SITE</label><select id="newSite"><option>Adyar</option><option>Velachery</option><option>T. Nagar</option><option>Anna Nagar</option><option>Perungudi</option><option>Guindy</option></select></div><div><label>STREET / AREA LABEL</label><input id="newArea" placeholder="Area or street label"></div><div><label>RECORDED LEVEL (%)</label><input id="newLevel" type="number" min="0" max="100" value="30"></div></div><p class="notice">Adds a local sample record to this browser session only. This does not write to a government database.</p><div class="modal-actions"><button class="btn light" onclick="closeModal()">Cancel</button><button class="btn" onclick="saveDrain()">Save sample drain</button></div></div></div>
+<div class="modal-back" id="readingModal"><div class="modal"><div class="eyebrow">PERSISTENT DRAIN INSPECTION</div><h2>Record drain inspection</h2><div class="modal-grid"><div><label>RECORDED LEVEL (%)</label><input id="readingLevel" type="number" min="0" max="100" value="50"></div><div><label>INSPECTOR NAME / ID</label><input id="readingInspector" value="Admin Officer (AO)" placeholder="e.g. Admin Officer"></div><div><label>DD-C01 (SEDIMENT RETENTION)</label><select id="readingC01"><option>Sediment & debris retention: Normal</option><option>Sediment & debris retention: Low accumulation</option><option>Sediment & debris retention: Moderate accumulation</option><option>Sediment & debris retention: Heavy accumulation / Action needed</option><option>Sediment & debris retention: Clean / Replaced</option></select></div><div><label>DD-C02 (HYDRAULIC EXPOSURE)</label><select id="readingC02"><option>Hydraulic exposure indicator: Normal flow</option><option>Hydraulic exposure indicator: Submerged peak</option><option>Hydraulic exposure indicator: Surcharged / Overflow</option><option>Hydraulic exposure indicator: Low exposure</option></select></div><div style="grid-column:1/-1"><label>OBSERVATION NOTES</label><input id="readingNote" placeholder="e.g. Cartridge inspected, debris cleared from inlet."></div></div><p class="notice">Saves a permanent inspection record to MongoDB Atlas and updates the drain level gauge.</p><div class="modal-actions"><button class="btn light" onclick="document.getElementById('readingModal').classList.remove('show')">Cancel</button><button class="btn" onclick="saveReading()">Save inspection</button></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

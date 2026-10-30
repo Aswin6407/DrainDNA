@@ -1,0 +1,33 @@
+{
+  "name": "draindna-municipal-portal",
+  "version": "1.0.0",
+  "description": "DrainDNA Municipal Drain Monitoring Portal",
+  "main": "backend/server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+
+  "keywords": [
+    "drainage-monitoring",
+    "municipal-portal",
+    "express",
+    "mongodb",
+    "drain-dna"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.2",
+    "multer": "^2.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

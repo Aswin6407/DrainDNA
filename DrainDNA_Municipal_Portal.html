@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102b22">
+<title>DrainDNA | Municipal Drain Monitoring</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{--forest:#123b2c;--deep:#102b22;--green:#b9f36b;--paper:#f3f6f0;--white:#fff;--ink:#183328;--muted:#75837a;--line:#e3e9e0;--red:#c75d4d;--amber:#c58a37;--shadow:0 12px 34px #193c2810}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif}button,input,select{font:inherit}button{cursor:pointer}.mono{font-family:'DM Mono',monospace}.eyebrow{font:500 10px 'DM Mono';letter-spacing:1.5px;text-transform:uppercase;color:#87978c}
+.topbar{height:68px;background:var(--deep);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 4.5%;position:sticky;top:0;z-index:10}.brand{display:flex;align-items:center;gap:10px;color:white;text-decoration:none;font:800 19px Manrope}.brandmark{height:35px;width:35px;background:#244b36;color:var(--green);border-radius:11px;display:grid;place-items:center;font-size:20px}.brand small{display:block;font:9px 'DM Mono';letter-spacing:1.3px;color:#9cb2a3}.top-right{display:flex;align-items:center;gap:20px;font-size:11px;color:#c0d0c5}.live{display:flex;align-items:center;gap:7px}.dot{width:7px;height:7px;border-radius:50%;background:#9de56c;box-shadow:0 0 0 4px #9de56c20}.profile{border-left:1px solid #ffffff25;padding-left:18px;display:flex;gap:9px;align-items:center}.avatar{width:30px;height:30px;border-radius:50%;background:#d9ebce;color:#254d37;display:grid;place-items:center;font-weight:800}
+.shell{display:grid;grid-template-columns:225px 1fr;min-height:calc(100vh - 68px)}aside{background:#17382b;color:#d8e4db;padding:25px 14px}.side-label{font:9px 'DM Mono';letter-spacing:1.4px;color:#83a18e;padding:12px 12px 8px}.side-link{display:flex;gap:12px;align-items:center;padding:12px;border-radius:9px;color:#b7c8bc;text-decoration:none;font-size:12px;margin:3px 0}.side-link.active,.side-link:hover{background:#2b513b;color:#d7ff9a}.side-link span{width:18px;text-align:center;font-size:15px}.side-note{margin:35px 7px 0;padding:14px;border:1px solid #ffffff20;border-radius:11px;font-size:10px;line-height:1.6;color:#a9bdaf}
+main{padding:30px 3.5% 55px;min-width:0}.pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:22px}.pagehead h1{font:800 clamp(25px,3vw,35px) Manrope;letter-spacing:-1.4px;margin:7px 0}.pagehead p{font-size:12px;color:var(--muted);margin:0}.head-actions{display:flex;gap:9px;flex-wrap:wrap}.btn{border:0;border-radius:9px;padding:11px 14px;background:var(--forest);color:white;font-size:11px;font-weight:700}.btn.light{background:white;color:var(--forest);border:1px solid var(--line)}.btn.green{background:var(--green);color:var(--forest)}
+.filters{display:flex;gap:12px;align-items:end;flex-wrap:wrap;background:white;border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:17px;box-shadow:var(--shadow)}.filter{display:flex;flex-direction:column;gap:6px;min-width:155px}.filter label{font:9px 'DM Mono';letter-spacing:1px;color:#829187;text-transform:uppercase}.filter select,.filter input{height:37px;border:1px solid var(--line);border-radius:8px;background:#fbfcfa;padding:0 10px;color:var(--ink);font-size:11px;outline:none}.filter.search{flex:1;min-width:190px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:17px}.kpi{background:white;border:1px solid var(--line);border-radius:13px;padding:17px 18px;box-shadow:var(--shadow)}.kpi-top{display:flex;justify-content:space-between;align-items:center}.kpi .label{font-size:10px;color:var(--muted)}.kpi .symbol{height:29px;width:29px;border-radius:9px;background:#edf5e8;display:grid;place-items:center;color:#39784a}.kpi strong{font:800 27px Manrope;display:block;margin:8px 0 2px}.kpi small{font-size:9px;color:#839087}
+.content-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:15px}.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);min-width:0}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.panel-head h2{font:700 14px Manrope;margin:0}.panel-head p{font-size:10px;color:var(--muted);margin:5px 0 0}.chip{font:9px 'DM Mono';padding:6px 8px;border-radius:20px;background:#eef5e9;color:#47754d;white-space:nowrap}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:570px}th{text-align:left;font:9px 'DM Mono';letter-spacing:.7px;color:#87958b;text-transform:uppercase;padding:11px 9px;border-bottom:1px solid var(--line)}td{padding:13px 9px;border-bottom:1px solid #edf0eb;font-size:10px;color:#53645a}tbody tr{cursor:pointer}tbody tr:hover{background:#f6faf3}tbody tr.selected{background:#edf6e9}td strong{color:var(--ink);font-size:11px}.sub{display:block;color:#96a198;font-size:9px;margin-top:3px}.status{font:9px 'DM Mono';padding:5px 7px;border-radius:20px;display:inline-block}.status.high{background:#fff0ed;color:#b84e40}.status.watch{background:#fff6e7;color:#a5792e}.status.normal{background:#edf6e9;color:#4c8052}
+.chart{height:160px;display:flex;align-items:end;gap:10px;padding:15px 4px 0;border-bottom:1px solid var(--line)}.chart-col{flex:1;display:flex;align-items:center;flex-direction:column;justify-content:end;height:100%;gap:7px}.chart-bar{width:min(25px,70%);background:linear-gradient(#b9e985,#6eaa70);border-radius:5px 5px 0 0;min-height:5px}.chart-col span{font:8px 'DM Mono';color:#8b988e}.chart-legend{font-size:9px;color:#87958b;margin-top:13px}
+.detail-panel{margin-top:15px;display:grid;grid-template-columns:1fr 1fr;gap:15px}.detail-title{display:flex;justify-content:space-between;gap:10px;align-items:start}.detail-title h2{font:800 20px Manrope;margin:5px 0}.detail-meta{font-size:10px;color:var(--muted);line-height:1.7}.level-number{font:800 38px Manrope;letter-spacing:-2px}.level-number small{font:11px 'DM Sans';color:var(--muted);letter-spacing:0}.level-track{height:11px;border-radius:20px;background:#edf1eb;overflow:hidden;margin:10px 0}.level-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#a8dc76,#e3b35d)}.detail-stats{display:flex;gap:20px;flex-wrap:wrap;margin-top:15px}.detail-stats div{font-size:9px;color:var(--muted)}.detail-stats b{display:block;color:var(--ink);font:700 12px Manrope;margin-top:4px}
+.uploadbox{border:1px dashed #b8c9b8;border-radius:11px;padding:17px;text-align:center;background:#f9fbf7}.uploadbox input{font-size:10px;max-width:100%}.preview{display:none;max-height:130px;max-width:100%;border-radius:8px;margin:12px auto 0}.history{margin-top:12px}.history-row{display:flex;justify-content:space-between;border-bottom:1px solid #edf0eb;padding:9px 0;font-size:10px}.history-row:last-child{border:0}.history-row span:last-child{font-family:'DM Mono';color:#75877a}
+.modal-back{display:none;position:fixed;inset:0;background:#0c211a99;z-index:30;align-items:center;justify-content:center;padding:20px}.modal-back.show{display:flex}.modal{background:white;border-radius:16px;padding:23px;width:min(460px,100%);box-shadow:0 25px 80px #0003}.modal h2{font:800 20px Manrope;margin:6px 0 18px}.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.modal label{display:block;font:9px 'DM Mono';color:#839087;margin-bottom:6px}.modal input,.modal select{width:100%;height:38px;border:1px solid var(--line);border-radius:8px;padding:0 9px;font-size:11px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.notice{font-size:9px;line-height:1.6;color:#8b988e;margin-top:12px}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;background:#163b2b;color:white;padding:12px 17px;border-radius:25px;font-size:11px;z-index:40;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:1000px){.shell{grid-template-columns:185px 1fr}.kpis{grid-template-columns:repeat(2,1fr)}.content-grid{grid-template-columns:1fr}.detail-panel{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.shell{display:block}aside{display:none}.topbar{padding:0 4%}.top-right .live{display:none}main{padding:22px 4% 40px}.pagehead{display:block}.head-actions{margin-top:15px}.kpis{gap:8px}.kpi{padding:13px}.kpi strong{font-size:23px}.detail-panel{grid-template-columns:1fr}.profile{padding-left:10px}.brand{font-size:16px}}
+
+.module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:15px}
+.metric-list{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.metric{background:#f7faf5;border:1px solid var(--line);border-radius:10px;padding:12px}
+.metric b{display:block;font:800 21px Manrope;margin:5px 0}
+.metric span{font-size:9px;color:var(--muted)}
+.mini-table{width:100%;min-width:0}.mini-table td{padding:10px 7px}
+.module-form{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.module-form input,.module-form select,.module-form textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;font:11px 'DM Sans';background:#fbfcfa}
+.module-form textarea{grid-column:1/-1;min-height:65px}
+.module-form button{grid-column:1/-1;justify-self:start}
+.module-note{font-size:9px;color:#87958b;line-height:1.6;margin-top:10px}
+.task-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #edf0eb;font-size:10px}
+.task-row:last-child{border:0}
+@media(max-width:700px){.module-grid{grid-template-columns:1fr}.metric-list{grid-template-columns:repeat(2,1fr)}}
+
+
+/* Motion polish: smooth navigation, gentle reveal and tactile interactions */
+html{scroll-behavior:smooth;scroll-padding-top:86px}
+section[id],.panel[id],.detail-panel[id]{scroll-margin-top:88px}
+.side-link{position:relative;overflow:hidden;transition:background .25s ease,color .25s ease,transform .25s ease,padding-left .25s ease}
+.side-link:hover{transform:translateX(3px);padding-left:15px}
+.side-link.active:before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 4px 4px 0;background:var(--green)}
+.btn,.kpi,.panel,.filters,.metric,.task-row,.chip{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.btn{transition:transform .2s ease,filter .2s ease,box-shadow .2s ease}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 7px 18px #17382b20}
+.btn:active{transform:translateY(0) scale(.98)}
+.kpi:hover,.panel:hover{box-shadow:0 16px 38px #193c2818}
+.kpi:hover{transform:translateY(-3px)}
+tbody tr{transition:background .2s ease,transform .2s ease}
+tbody tr:hover{transform:translateX(2px)}
+.chart-bar{transform-origin:bottom;animation:barRise .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes barRise{from{transform:scaleY(.05);opacity:.45}to{transform:scaleY(1);opacity:1}}
+.reveal-ready{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.75,.25,1)}
+.reveal-ready.revealed{opacity:1;transform:translateY(0)}
+.modal-back{opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease}
+.modal-back.show{display:flex;opacity:1;visibility:visible}
+.modal{transform:translateY(18px) scale(.98);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+.modal-back.show .modal{transform:translateY(0) scale(1)}
+.toast{transition:opacity .3s ease,transform .3s cubic-bezier(.2,.8,.2,1)}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+ .reveal-ready{opacity:1;transform:none}
+}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+ <a class="brand" href="#"><span class="brandmark">≈</span><span>DrainDNA<small>MUNICIPAL DRAIN MONITORING</small></span></a>
+ <div class="top-right"><div class="live"><i class="dot"></i> DEMONSTRATION ENVIRONMENT</div><div class="profile"><span class="avatar">AO</span><span>Admin Officer<br><small style="color:#8fa397">Chennai Region</small></span></div></div>
+</header>
+<div class="shell">
+<aside>
+ <div class="side-label">WORKSPACE</div>
+ <a class="side-link active" href="#overview"><span>▦</span> Overview</a>
+ <a class="side-link" href="#registry"><span>⌖</span> Drain registry</a>
+ <a class="side-link" href="#selected-drain"><span>◉</span> Drain details</a>
+ <a class="side-link" href="#records"><span>▤</span> Inspection records</a>
+ <div class="side-label" style="margin-top:22px">MANAGEMENT</div>
+ <a class="side-link" href="#records"><span>▧</span> Image records</a>
+ <a class="side-link" href="#analytics"><span>◷</span> Analytics & trends</a>
+ <a class="side-link" href="#maintenance"><span>⚒</span> Maintenance</a>
+ <a class="side-link" href="#evidence"><span>▧</span> Cartridge evidence</a>
+ <a class="side-link" href="#public-reports"><span>＋</span> Public reports</a>
+</aside>
+<main id="overview">
+ <div class="pagehead"><div><div class="eyebrow">CITY INFRASTRUCTURE / MONITORING</div><h1>Drain Monitoring Centre</h1><p>Centralized view of registered drainage assets, recorded levels and inspection activity.</p></div><div class="head-actions"><button class="btn light" onclick="exportCSV()">↓ Export records</button><button class="btn green" onclick="openModal()">＋ Register drain</button></div></div>
+ <div class="filters">
+  <div class="filter"><label>City</label><select id="city"><option>Chennai</option><option disabled>Coimbatore — coming soon</option><option disabled>Madurai — coming soon</option></select></div>
+  <div class="filter"><label>Monitoring site</label><select id="site"><option value="All sites">All sites</option><option>Adyar</option><option>Velachery</option><option>T. Nagar</option><option>Anna Nagar</option><option>Perungudi</option><option>Guindy</option></select></div>
+  <div class="filter search"><label>Find a drain</label><input id="search" placeholder="Search Drain ID, site or street..."></div>
+  <div class="filter"><label>Level status</label><select id="statusFilter"><option value="All">All statuses</option><option value="High">High</option><option value="Watch">Watch</option><option value="Normal">Normal</option></select></div>
+ </div>
+ <div class="kpis">
+  <div class="kpi"><div class="kpi-top"><span class="label">Registered drains</span><span class="symbol">⌖</span></div><strong id="totalKpi">12</strong><small>Across selected monitoring sites</small></div>
+  <div class="kpi"><div class="kpi-top"><span class="label">High level</span><span class="symbol" style="background:#fff0ed;color:#b84e40">↑</span></div><strong id="highKpi">3</strong><small>Requires priority inspection</small></div>
+  <div class="kpi"><div class="kpi-top"><span class="label">Watch list</span><span class="symbol" style="background:#fff6e7;color:#a5792e">◷</span></div><strong id="watchKpi">4</strong><small>Monitor during next review</small></div>
+  <div class="kpi"><div class="kpi-top"><span class="label">Images recorded</span><span class="symbol">▧</span></div><strong id="imageKpi">5</strong><small>Sample records in this sample</small></div>
+ </div>
+ <div class="content-grid">
+  <section class="panel" id="registry"><div class="panel-head"><div><h2>Registered drain assets</h2><p>Select any drain to view its individual monitoring record.</p></div><span class="chip" id="countChip">12 DRAINS</span></div>
+   <div class="table-wrap"><table><thead><tr><th>Drain ID</th><th>Monitoring site</th><th>Recorded level</th><th>Status</th><th>Last observation</th></tr></thead><tbody id="drainRows"></tbody></table></div>
+  </section>
+  <section class="panel"><div class="panel-head"><div><h2>Level distribution</h2><p>Illustrative drain level by status</p></div><span class="chip">SAMPLE DATA</span></div><div class="chart" id="chart"></div><div class="chart-legend">● Each bar represents a sample drain's recorded level as a percentage of the assumed monitoring range.</div></section>
+ </div>
+ <section class="detail-panel" id="selected-drain">
+  <div class="panel"><div class="detail-title"><div><div class="eyebrow">INDIVIDUAL ASSET PROFILE</div><h2 id="detailId">CHN-ADY-001</h2><div class="detail-meta" id="detailMeta">Adyar · Sample monitoring location</div></div><span class="status high" id="detailStatus">HIGH</span></div>
+   <div style="margin-top:22px"><div class="eyebrow">LATEST RECORDED DRAIN LEVEL</div><div class="level-number"><span id="detailLevel">86</span><small> / 100%</small></div><div class="level-track"><div class="level-fill" id="levelFill" style="width:86%"></div></div><div class="detail-meta">Illustrative level indicator · not a live sensor reading</div></div>
+   <div class="detail-stats"><div>LAST OBSERVED<b id="detailDate">Today, 09:30</b></div><div>IMAGE RECORDS<b id="detailImages">1 attached</b></div><div>ASSET STATUS<b id="detailAsset">Registered</b></div></div>
+   <div style="margin-top:18px"><button class="btn" onclick="openReading()">＋ Add level observation</button></div>
+  </div>
+  <div class="panel" id="records"><div class="panel-head"><div><h2>Drain image & inspection records</h2><p>Files are previewed locally in this demonstration.</p></div><span class="chip">SELECTED DRAIN</span></div>
+   <div class="uploadbox"><div style="font-size:23px">▧</div><b style="font:700 12px Manrope">Attach cartridge / drain image</b><p style="font-size:9px;color:#87958b">The image will be associated with the selected drain ID in this sample session.</p><input type="file" id="imageInput" accept="image/*"><img class="preview" id="imagePreview" alt="Uploaded drain image"><div id="imageName" style="font-size:9px;color:#6e806f;margin-top:7px"></div></div>
+   <div class="history" id="history"><div class="history-row"><span>Initial sample registration</span><span>sample RECORD</span></div></div>
+  </div>
+ </section>
+
+ <section class="module-grid" id="analytics">
+  <div class="panel">
+   <div class="panel-head"><div><h2>Municipal operations analytics</h2><p>Illustrative summary for the selected demonstration dataset</p></div><span class="chip">illustrative analytics</span></div>
+   <div class="metric-list">
+    <div class="metric"><span>INSPECTIONS COMPLETED</span><b>28</b><span>Sample records</span></div>
+    <div class="metric"><span>PENDING INSPECTIONS</span><b>06</b><span>Illustrative queue</span></div>
+    <div class="metric"><span>MAINTENANCE PENDING</span><b>04</b><span>Sample tasks</span></div>
+    <div class="metric"><span>MAINTENANCE COMPLETED</span><b>17</b><span>Sample records</span></div>
+    <div class="metric"><span>VERIFICATION PENDING</span><b>03</b><span>Awaiting follow-up</span></div>
+    <div class="metric"><span>RECURRING ISSUE FLAGS</span><b>05</b><span>Rule-based examples</span></div>
+   </div>
+   <p class="module-note">These are illustrative dashboard figures, not live database analytics. In a deployed system, all metrics should be calculated from verified inspection, maintenance and verification records. Date and status filters can be connected to those records in the backend.</p>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><div><h2>Inspection & maintenance trends</h2><p>Example monthly activity overview</p></div><span class="chip">SAMPLE SERIES</span></div>
+   <div class="chart" style="height:145px">
+    <div class="chart-col"><div class="chart-bar" style="height:38%"></div><span>JAN</span></div>
+    <div class="chart-col"><div class="chart-bar" style="height:56%"></div><span>FEB</span></div>
+    <div class="chart-col"><div class="chart-bar" style="height:48%"></div><span>MAR</span></div>
+    <div class="chart-col"><div class="chart-bar" style="height:74%"></div><span>APR</span></div>
+    <div class="chart-col"><div class="chart-bar" style="height:65%"></div><span>MAY</span></div>
+    <div class="chart-col"><div class="chart-bar" style="height:88%"></div><span>JUN</span></div>
+   </div>
+   <p class="module-note">Monthly bars are visual placeholders. No real inspection trend is inferred from the sample values.</p>
+  </div>
+ </section>
+ <section class="module-grid" id="maintenance">
+  <div class="panel">
+   <div class="panel-head"><div><h2>Maintenance work queue</h2><p>Example tasks linked to drain IDs</p></div><span class="chip">WORKFLOW PREVIEW</span></div>
+   <div id="taskList">
+    <div class="task-row"><span><b>CHN-ADY-001</b><br><span class="sub">Remove accumulated debris · High priority</span></span><span class="status high">Pending</span></div>
+    <div class="task-row"><span><b>CHN-VEL-002</b><br><span class="sub">Inspect cartridge and clear inlet · Medium</span></span><span class="status watch">Assigned</span></div>
+    <div class="task-row"><span><b>CHN-PER-001</b><br><span class="sub">Follow-up inspection required</span></span><span class="status normal">Awaiting verification</span></div>
+   </div>
+   <p class="module-note">Proposed workflow: Original inspection → maintenance action → follow-up inspection → verification. Before/after evidence and comparisons require actual records; this preview does not claim improvements.</p>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><div><h2>Log a maintenance task</h2><p>Local demonstration interaction</p></div><span class="chip">SESSION ONLY</span></div>
+   <div class="module-form">
+    <input id="taskDrain" placeholder="Drain ID (e.g. CHN-ADY-001)">
+    <select id="taskPriority"><option>High priority</option><option>Medium priority</option><option>Low priority</option></select>
+    <input id="taskAction" placeholder="Maintenance action">
+    <select id="taskStatus"><option>Pending</option><option>Assigned</option><option>In Progress</option><option>Completed</option><option>Awaiting Verification</option><option>Verified</option></select>
+    <button class="btn" onclick="addDemoTask()">＋ Add sample task</button>
+   </div>
+   <p class="module-note">Task entries remain in this browser session only. Staff accounts, permissions, assignments and durable task history need a backend.</p>
+  </div>
+ </section>
+ <section class="module-grid" id="evidence">
+  <div class="panel">
+   <div class="panel-head"><div><h2>Cartridge & evidence register</h2><p>DrainDNA cartridge types</p></div><span class="chip">PRODUCT MODULE</span></div>
+   <div class="task-row"><span><b>DD-C01</b><br><span class="sub">Sediment and Debris Retention</span></span><span class="status normal">Cartridge type</span></div>
+   <div class="task-row"><span><b>DD-C02</b><br><span class="sub">Hydraulic Exposure Indicator</span></span><span class="status normal">Cartridge type</span></div>
+   <div class="task-row"><span><b>Evidence categories</b><br><span class="sub">Sediment · Leaves · Plastic · Organic · Mixed · Other</span></span><span class="chip">TAXONOMY</span></div>
+   <p class="module-note">The drain image upload above acts as a local evidence preview. Cartridge assignment, installation/removal dates, material quantities and replacement history are proposed data fields—not yet stored records.</p>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><div><h2>Recurring issue watchlist</h2><p>Transparent historical-pattern concept</p></div><span class="chip">RULE-BASED</span></div>
+   <div class="task-row"><span><b>CHN-ADY-001</b><br><span class="sub">Repeated debris observations · example flag</span></span><span class="status high">Review</span></div>
+   <div class="task-row"><span><b>CHN-PER-001</b><br><span class="sub">Multiple high-level sample entries · example flag</span></span><span class="status watch">Monitor</span></div>
+   <p class="module-note">A production rule can count similar recorded issues within a configurable date window and flag drains for closer inspection. These sample flags are not AI predictions or flood forecasts.</p>
+  </div>
+ </section>
+ <section class="module-grid" id="public-reports">
+  <div class="panel">
+   <div class="panel-head"><div><h2>Public drainage issue reporting</h2><p>Citizen-facing form concept</p></div><span class="chip">PUBLIC PORTAL PREVIEW</span></div>
+   <div class="module-form">
+    <select id="publicCategory"><option>Waterlogging</option><option>Blockage</option><option>Overflow</option><option>Waste accumulation</option><option>Damaged drainage structure</option><option>Other</option></select>
+    <input id="publicLocation" placeholder="Location / landmark">
+    <textarea id="publicDescription" placeholder="Describe the drainage issue"></textarea>
+    <button class="btn" onclick="submitPublicReport()">Submit sample report</button>
+   </div>
+   <div id="reportResult" class="module-note">A real public portal would generate a reference ID and provide status tracking after server-side validation and rate limiting.</div>
+   <p class="module-note">This form creates a reference for demonstration only. It does not send a report to a municipal authority.</p>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><div><h2>Inspection → maintenance → verification</h2><p>Recommended evidence chain for every drain</p></div><span class="chip">TRACEABLE WORKFLOW</span></div>
+   <div class="task-row"><span><b>01 · Original inspection</b><br><span class="sub">Condition, cartridge status, photos and notes</span></span><span class="status watch">Record</span></div>
+   <div class="task-row"><span><b>02 · Maintenance action</b><br><span class="sub">Assigned staff, action, materials removed, before/after photos</span></span><span class="status watch">Action</span></div>
+   <div class="task-row"><span><b>03 · Follow-up inspection</b><br><span class="sub">Repeat the same observations where possible</span></span><span class="status watch">Compare</span></div>
+   <div class="task-row"><span><b>04 · Verification outcome</b><br><span class="sub">Improved · No significant change · Worsened · Inconclusive</span></span><span class="status normal">Verify</span></div>
+   <p class="module-note">Flow rate can be calculated as water volume ÷ elapsed time when both are measured, with units displayed. No before/after improvement is fabricated in this sample.</p>
+  </div>
+ </section>
+
+ 
+
+<div class="module-note" style="margin:24px 0 8px;text-align:center">
+ DrainDNA municipal monitoring interface · Prototype with illustrative records.
+ Live sensor feeds, official municipal data connections and persistent record storage
+ can be enabled through the production backend.
+</div>
+
+</main>
+</div>
+<div class="modal-back" id="modal"><div class="modal"><div class="eyebrow">ASSET MANAGEMENT</div><h2 id="modalTitle">Register a drain</h2><div class="modal-grid"><div><label>DRAIN ID</label><input id="newId" placeholder="e.g. CHN-ADY-013"></div><div><label>MONITORING SITE</label><select id="newSite"><option>Adyar</option><option>Velachery</option><option>T. Nagar</option><option>Anna Nagar</option><option>Perungudi</option><option>Guindy</option></select></div><div><label>STREET / AREA LABEL</label><input id="newArea" placeholder="Area or street label"></div><div><label>RECORDED LEVEL (%)</label><input id="newLevel" type="number" min="0" max="100" value="30"></div></div><p class="notice">Adds a local sample record to this browser session only. This does not write to a government database.</p><div class="modal-actions"><button class="btn light" onclick="closeModal()">Cancel</button><button class="btn" onclick="saveDrain()">Save sample drain</button></div></div></div>
+<div class="modal-back" id="readingModal"><div class="modal"><div class="eyebrow">INDIVIDUAL DRAIN RECORD</div><h2>Add level observation</h2><div class="modal-grid"><div><label>RECORDED LEVEL (%)</label><input id="readingLevel" type="number" min="0" max="100" value="50"></div><div><label>OBSERVATION NOTE</label><input id="readingNote" placeholder="e.g. Cartridge inspected"></div></div><p class="notice">This observation updates the selected sample drain in the current browser session.</p><div class="modal-actions"><button class="btn light" onclick="document.getElementById('readingModal').classList.remove('show')">Cancel</button><button class="btn" onclick="saveReading()">Save observation</button></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+let drains=[
+{id:'CHN-ADY-001',site:'Adyar',area:'Canal Road',level:86,status:'High',date:'Today, 09:30',images:1},
+{id:'CHN-ADY-002',site:'Adyar',area:'River View Street',level:64,status:'Watch',date:'Today, 08:45',images:0},
+{id:'CHN-VEL-001',site:'Velachery',area:'Main Road',level:72,status:'Watch',date:'Yesterday, 16:20',images:1},
+{id:'CHN-VEL-002',site:'Velachery',area:'Lake View Avenue',level:91,status:'High',date:'Today, 07:55',images:1},
+{id:'CHN-TNG-001',site:'T. Nagar',area:'Usman Road',level:38,status:'Normal',date:'Yesterday, 14:10',images:0},
+{id:'CHN-TNG-002',site:'T. Nagar',area:'South Street',level:58,status:'Watch',date:'Yesterday, 12:30',images:1},
+{id:'CHN-ANN-001',site:'Anna Nagar',area:'2nd Avenue',level:27,status:'Normal',date:'Today, 08:10',images:0},
+{id:'CHN-ANN-002',site:'Anna Nagar',area:'West Extension',level:47,status:'Normal',date:'Yesterday, 17:00',images:0},
+{id:'CHN-PER-001',site:'Perungudi',area:'Industrial Link Road',level:83,status:'High',date:'Today, 09:05',images:1},
+{id:'CHN-PER-002',site:'Perungudi',area:'Lake Bund',level:68,status:'Watch',date:'Yesterday, 15:40',images:0},
+{id:'CHN-GUI-001',site:'Guindy',area:'Race Course Road',level:33,status:'Normal',date:'Today, 08:25',images:0},
+{id:'CHN-GUI-002',site:'Guindy',area:'Industrial Estate',level:55,status:'Normal',date:'Yesterday, 13:15',images:0}
+];
+let selectedId=drains[0].id, uploadedByDrain={};
+const $=id=>document.getElementById(id);
+function statusFor(n){return n>=75?'High':n>=60?'Watch':'Normal'}
+function showToast(msg){$('toast').textContent=msg;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2300)}
+function filtered(){let site=$('site').value,term=$('search').value.toLowerCase(),st=$('statusFilter').value;return drains.filter(d=>(site==='All sites'||d.site===site)&&(st==='All'||d.status===st)&&(`${d.id} ${d.site} ${d.area}`).toLowerCase().includes(term))}
+function render(){
+ let list=filtered();$('drainRows').innerHTML=list.map(d=>`<tr class="${d.id===selectedId?'selected':''}" onclick="selectDrain('${d.id}')"><td><strong>${d.id}</strong><span class="sub">${d.area}</span></td><td>${d.site}</td><td><strong>${d.level}%</strong></td><td><span class="status ${d.status.toLowerCase()}">${d.status}</span></td><td>${d.date}</td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center;padding:25px">No drains match these filters.</td></tr>';
+ $('countChip').textContent=list.length+' DRAINS';$('totalKpi').textContent=list.length;$('highKpi').textContent=list.filter(d=>d.status==='High').length;$('watchKpi').textContent=list.filter(d=>d.status==='Watch').length;$('imageKpi').textContent=list.reduce((a,d)=>a+d.images,0);
+ $('chart').innerHTML=list.slice(0,10).map(d=>`<div class="chart-col"><div class="chart-bar" title="${d.id}: ${d.level}%" style="height:${d.level}%"></div><span>${d.id.split('-').slice(1).join('')}</span></div>`).join('');
+ renderDetail();
+}
+function selectDrain(id){selectedId=id;render();$('selected-drain').scrollIntoView({behavior:'smooth',block:'start'})}
+function renderDetail(){let d=drains.find(x=>x.id===selectedId);if(!d)return;$('detailId').textContent=d.id;$('detailMeta').textContent=d.site+' · '+d.area+' · Chennai';$('detailLevel').textContent=d.level;$('levelFill').style.width=d.level+'%';$('detailStatus').textContent=d.status.toUpperCase();$('detailStatus').className='status '+d.status.toLowerCase();$('detailDate').textContent=d.date;$('detailImages').textContent=(d.images+(uploadedByDrain[d.id]?1:0))+' attached';$('detailAsset').textContent='Registered';
+ let records=[`<div class="history-row"><span>Sample asset registration</span><span>sample</span></div>`];if(d.date!=='Today, 09:30'&&d.date!=='Today, 08:45')records.unshift(`<div class="history-row"><span>Latest level observation</span><span>${d.date}</span></div>`);if(uploadedByDrain[d.id])records.unshift(`<div class="history-row"><span>Image attached: ${uploadedByDrain[d.id]}</span><span>THIS SESSION</span></div>`);$('history').innerHTML=records.join('');$('imagePreview').style.display='none';$('imageName').textContent='';$('imageInput').value='';}
+['site','statusFilter','search'].forEach(id=>$(id).addEventListener('input',render));
+function openModal(){$('modal').classList.add('show')}function closeModal(){$('modal').classList.remove('show')}
+function saveDrain(){let id=$('newId').value.trim().toUpperCase(),site=$('newSite').value,area=$('newArea').value.trim(),level=Number($('newLevel').value);if(!id||!area||!Number.isFinite(level)||level<0||level>100){showToast('Please complete the fields with a valid level.');return}if(drains.some(d=>d.id===id)){showToast('That Drain ID already exists.');return}drains.unshift({id,site,area,level,status:statusFor(level),date:'Just added',images:0});selectedId=id;closeModal();$('newId').value='';$('newArea').value='';$('site').value='All sites';$('statusFilter').value='All';$('search').value='';render();showToast('Sample drain registered in this session.')}
+function openReading(){$('readingModal').classList.add('show')}
+function saveReading(){let v=Number($('readingLevel').value);if(!Number.isFinite(v)||v<0||v>100){showToast('Enter a level between 0 and 100.');return}let d=drains.find(x=>x.id===selectedId);d.level=v;d.status=statusFor(v);d.date='Just now';$('readingModal').classList.remove('show');render();showToast('Sample observation updated.')}
+$('imageInput').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;uploadedByDrain[selectedId]=f.name;let img=$('imagePreview');img.src=URL.createObjectURL(f);img.style.display='block';$('imageName').textContent='Attached to '+selectedId+': '+f.name;renderDetail();img.src=URL.createObjectURL(f);img.style.display='block';$('imageName').textContent='Attached to '+selectedId+': '+f.name;showToast('Image preview attached to selected drain.');});
+function exportCSV(){let rows=[['Drain ID','Site','Area','Level (%)','Status','Last observation'],...filtered().map(d=>[d.id,d.site,d.area,d.level,d.status,d.date])];let csv=rows.map(r=>r.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(',')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='DrainDNA_sample_drain_register.csv';a.click();URL.revokeObjectURL(a.href);showToast('Filtered sample register exported.')}
+
+function addDemoTask(){
+ const drain=$('taskDrain').value.trim().toUpperCase(), action=$('taskAction').value.trim();
+ if(!drain||!action){showToast('Enter a drain ID and maintenance action.');return}
+ const row=document.createElement('div');row.className='task-row';
+ const left=document.createElement('span');left.innerHTML='<b></b><br><span class="sub"></span>';
+ left.querySelector('b').textContent=drain;left.querySelector('.sub').textContent=action+' · '+$('taskPriority').value;
+ const right=document.createElement('span');right.className='status watch';right.textContent=$('taskStatus').value;
+ row.append(left,right);$('taskList').prepend(row);$('taskDrain').value='';$('taskAction').value='';
+ showToast('sample maintenance task added to this session.');
+}
+function submitPublicReport(){
+ const location=$('publicLocation').value.trim(), description=$('publicDescription').value.trim();
+ if(!location||!description){showToast('Enter a location and issue description.');return}
+ const ref='DD-REP-'+Math.floor(10000+Math.random()*90000);
+ $('reportResult').textContent='sample report reference: '+ref+' · '+$('publicCategory').value+' · '+location+'. This report has not been sent to an authority.';
+ $('publicLocation').value='';$('publicDescription').value='';showToast('sample report reference generated.');
+}
+
+
+// Smooth sidebar navigation with an eased glide and active-section tracking.
+document.querySelectorAll('.side-link[href^="#"]').forEach(link=>{
+ link.addEventListener('click',e=>{
+  const target=document.querySelector(link.getAttribute('href'));
+  if(!target)return;
+  e.preventDefault();
+  target.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  history.replaceState(null,'',link.getAttribute('href'));
+  document.querySelectorAll('.side-link').forEach(a=>a.classList.remove('active'));
+  link.classList.add('active');
+ });
+});
+const revealTargets=document.querySelectorAll('main > .pagehead, main > .filters, main > .kpis, main > .content-grid, main > .detail-panel, main > .module-grid');
+revealTargets.forEach(el=>el.classList.add('reveal-ready'));
+if('IntersectionObserver' in window){
+ const revealObserver=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+   if(entry.isIntersecting){entry.target.classList.add('revealed');revealObserver.unobserve(entry.target)}
+  });
+ },{threshold:.08,rootMargin:'0px 0px -35px 0px'});
+ revealTargets.forEach(el=>revealObserver.observe(el));
+}else{revealTargets.forEach(el=>el.classList.add('revealed'))}
+const sectionLinks=[...document.querySelectorAll('.side-link[href^="#"]')];
+const sectionObserver=new IntersectionObserver(entries=>{
+ entries.forEach(entry=>{
+  if(entry.isIntersecting){
+   const active=sectionLinks.find(a=>a.getAttribute('href')==='#'+entry.target.id);
+   if(active){sectionLinks.forEach(a=>a.classList.remove('active'));active.classList.add('active')}
+  }
+ });
+},{rootMargin:'-18% 0px -68% 0px',threshold:0});
+sectionLinks.forEach(a=>{const section=document.querySelector(a.getAttribute('href'));if(section)sectionObserver.observe(section)});
+
+render();
+</script>
+</body></html>
